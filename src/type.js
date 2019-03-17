@@ -1,5 +1,5 @@
 // @flow
 
 export type Args = {|
-    path: string,
+    name: string,
 |}
