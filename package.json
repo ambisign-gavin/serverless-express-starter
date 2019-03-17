@@ -21,6 +21,7 @@
     "execa": "^1.0.0",
     "flow-bin": "^0.95.1",
     "inquirer": "^6.2.2",
+    "yaml": "^1.4.0",
     "yargs": "^13.2.2"
   },
   "devDependencies": {

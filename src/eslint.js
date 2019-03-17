@@ -2,6 +2,7 @@
 import execa from 'execa';
 import fs from 'fs';
 import { join } from 'path';
+import YAML from 'yaml';
 
 class Eslint {
     getPackages(): Array<string> {
@@ -39,6 +40,18 @@ class Eslint {
             };
             const newEslintrc = JSON.stringify(eslintrc, null, 4) + '\n';
             fs.writeFileSync(jsonConfig, newEslintrc);
+        }
+
+        const ymlConfig = join(projectPath, '.eslintrc.yml');
+        if (fs.existsSync(ymlConfig)) {
+            const file = fs.readFileSync(ymlConfig, 'utf8');
+            let eslintrc = YAML.parse(file);
+            eslintrc = {
+                ...eslintrc,
+                parser: 'babel-eslint'
+            };
+            const newEslintrc = YAML.stringify(eslintrc);
+            fs.writeFileSync(ymlConfig, newEslintrc);
         }
     }
 }
