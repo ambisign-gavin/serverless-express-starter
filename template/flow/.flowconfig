@@ -1,9 +1,9 @@
 [ignore]
-<PROJECT_ROOT>/template/*
+
 [include]
 
 [libs]
-
+<PROJECT_ROOT>/flow-typed/npm/
 [lints]
 
 [options]
