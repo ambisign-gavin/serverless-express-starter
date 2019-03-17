@@ -1,7 +1,6 @@
 // @flow
 import { type Args } from './type';
 import chalk from 'chalk';
-import shell from 'shelljs';
 import fs, { writeFileSync } from 'fs';
 import del from 'del';
 import { join } from 'path';
@@ -39,12 +38,16 @@ export async function initProject(args: Args) {
         join(projectPath, 'src'),
         join(projectPath, 'bin'),
         join(projectPath, '.gitignore'),
+        join(projectPath, '.eslintrc.js'),
+        join(projectPath, '.flowconfig'),
         join(projectPath, '.babelrc'),
         join(projectPath, '.git'),
         join(projectPath, 'package-lock.json'),
     ]);
-    
-    shell.cp('-R', join(projectPath, 'template/default/*'), projectPath);
+
+    execa.shellSync('cp -a template/default/. ./', {
+        cwd: projectPath
+    });
 
     await del([
         join(projectPath, 'template'),
