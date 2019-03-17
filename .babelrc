@@ -1,5 +1,8 @@
 {
-    "plugins": ["@babel/plugin-transform-flow-strip-types"],
+    "plugins": [
+        "@babel/plugin-transform-flow-strip-types",
+        "@babel/plugin-transform-runtime"
+    ],
     "presets": [
         "@babel/preset-env"
     ]
