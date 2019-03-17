@@ -1,0 +1,30 @@
+{
+  "name": "serverless-express-starter",
+  "version": "1.0.0",
+  "description": "A quick starter for serverless",
+  "main": "dist/cli.js",
+  "bin": {
+    "serverless-express-starter": "./bin/index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": "rimraf dist",
+    "build": "npm run clean && babel src -d dist"
+  },
+  "author": "gavin",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^2.4.2",
+    "eslint": "^5.15.2",
+    "flow-bin": "^0.95.1",
+    "shelljs": "^0.8.3",
+    "yargs": "^13.2.2"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.3.4",
+    "@babel/plugin-transform-flow-strip-types": "^7.3.4",
+    "@babel/preset-env": "^7.3.4",
+    "rimraf": "^2.6.3"
+  }
+}
