@@ -8,6 +8,7 @@ import execa from 'execa';
 import inquirerRobot from './inquirer';
 import packageManager from './packageManager';
 import typeChecker from './typeChecker';
+import eslint from './eslint';
 
 export function commandChecker(args: Args): boolean {
     const prjectName = args.name;
@@ -65,11 +66,26 @@ export async function initProject(args: Args) {
     writeFileSync(join(projectPath, 'package.json'), JSON.stringify(packageContext, null, 2) + '\n');
 
     await packageManager.installDefault(pkgManagerPlatform, projectPath);
-    await packageManager.install(
-        pkgManagerPlatform, 
-        projectPath, 
-        typeChecker.getInstallPackage(typeChackerPlatform), 
-        true
-    );
-    await typeChecker.runExtraSettings(typeChackerPlatform, projectPath);
+    if (typeChackerPlatform !== 'none') {
+        await packageManager.install(
+            pkgManagerPlatform, 
+            projectPath, 
+            typeChecker.getInstallPackage(typeChackerPlatform), 
+            true
+        );
+        await typeChecker.runExtraSettings(typeChackerPlatform, projectPath);
+    }
+    
+    
+    if (inquirerRobot.isUsedEslint) {
+        await packageManager.install(
+            pkgManagerPlatform, 
+            projectPath, 
+            ['eslint@^5.0.0', 'babel-eslint@^10.0.0'], 
+            true
+        );
+        await eslint.init(projectPath);
+        eslint.rejectParserConfig(projectPath);
+    }
+    
 }

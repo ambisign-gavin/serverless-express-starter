@@ -11,6 +11,7 @@ export class InquirerRobot {
     _description: string = '';
     _pkgManager: PackageManagerPlatform = 'npm';
     _typeChecker: TypeCheckerPlatform = 'none';
+    _isUsedEslint: boolean = false;
 
     async run() {
         this._description = await inquer({
@@ -37,6 +38,12 @@ export class InquirerRobot {
                 'flow'
             ]
         });
+
+        this._isUsedEslint = await inquer({
+            type: 'confirm',
+            name: 'UseEslint',
+            message: 'Do you want to use eslint?'
+        });
     }
 
     get description(): string {
@@ -49,6 +56,10 @@ export class InquirerRobot {
 
     get typeChecker(): TypeCheckerPlatform {
         return this._typeChecker;
+    }
+
+    get isUsedEslint(): boolean {
+        return this._isUsedEslint;
     }
 }
 
