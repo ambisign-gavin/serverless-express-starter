@@ -4,4 +4,6 @@ export type Args = {|
     name: string,
 |}
 
-export type PackageManagerType = 'npm' | 'yarn';
+export type PackageManagerPlatform = 'npm' | 'yarn';
+
+export type TypeCheckerPlatform = 'none' | 'flow';

@@ -6,7 +6,8 @@ import del from 'del';
 import { join } from 'path';
 import execa from 'execa';
 import inquirerRobot from './inquirer';
-import packageInstaller from './packageManager';
+import packageManager from './packageManager';
+import typeChecker from './typeChecker';
 
 export function commandChecker(args: Args): boolean {
     const prjectName = args.name;
@@ -27,6 +28,8 @@ export async function initProject(args: Args) {
     await inquirerRobot.run();
 
     const projectPath = join(process.cwd(), projectName);
+    const pkgManagerPlatform = inquirerRobot.pkgManager;
+    const typeChackerPlatform = inquirerRobot.typeChecker;
 
     await execa('git', [
         'clone',
@@ -45,7 +48,7 @@ export async function initProject(args: Args) {
         join(projectPath, 'package-lock.json'),
     ]);
 
-    execa.shellSync('cp -a template/default/. ./', {
+    execa.shellSync(`cp -a ${typeChecker.generateTemplatePath(inquirerRobot.typeChecker)}. ./`, {
         cwd: projectPath
     });
 
@@ -53,14 +56,20 @@ export async function initProject(args: Args) {
         join(projectPath, 'template'),
     ]);
 
-    const packageContext = packageInstaller.generatePackageJson(
-        inquirerRobot.pkgManager,
+    const packageContext = packageManager.generatePackageJson(
+        pkgManagerPlatform,
         projectName,
         inquirerRobot.description
     );
 
     writeFileSync(join(projectPath, 'package.json'), JSON.stringify(packageContext, null, 2) + '\n');
 
-    packageInstaller.install(inquirerRobot.pkgManager, projectPath);
-    
+    await packageManager.installDefault(pkgManagerPlatform, projectPath);
+    await packageManager.install(
+        pkgManagerPlatform, 
+        projectPath, 
+        typeChecker.getInstallPackage(typeChackerPlatform), 
+        true
+    );
+    await typeChecker.runExtraSettings(typeChackerPlatform, projectPath);
 }

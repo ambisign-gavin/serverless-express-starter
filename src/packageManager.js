@@ -1,6 +1,6 @@
 // @flow
 import execa from 'execa';
-import { type PackageManagerType } from './type';
+import { type PackageManagerPlatform } from './type';
 
 const dependenciesModule = [
     'express@^4.0.0',
@@ -16,20 +16,17 @@ const devDependenciesModule = [
 ];
 
 class PackageManager {
-    async install(packageManager: PackageManagerType, projectPath: string): Promise<void> {
+    async install(packageManager: PackageManagerPlatform, projectPath: string, packages: Array<string>, isDev: boolean = false): Promise<void> {
         try {
+            const commands = [
+                ...packages
+            ];
+            if (isDev) {
+                commands.unshift('-D');
+            }
             await execa(packageManager,[
                 'add',
-                ...dependenciesModule
-            ], {
-                cwd: projectPath,
-                stdio: 'inherit'
-            });
-        
-            await execa(packageManager,[
-                'add',
-                '-D',
-                ...devDependenciesModule
+                ...commands
             ], {
                 cwd: projectPath,
                 stdio: 'inherit'
@@ -40,7 +37,26 @@ class PackageManager {
         return Promise.resolve();
     }
 
-    generatePackageJson(packageManager: PackageManagerType, name: string, description: string): Object {
+    async installDefault(packageManager: PackageManagerPlatform, projectPath: string): Promise<void> {
+        try {
+            await this.install(
+                packageManager,
+                projectPath,
+                dependenciesModule
+            );
+            await this.install(
+                packageManager,
+                projectPath,
+                devDependenciesModule,
+                true,
+            );
+        } catch (error) {
+            return Promise.reject(error);
+        }
+        return Promise.resolve();
+    }
+
+    generatePackageJson(packageManager: PackageManagerPlatform, name: string, description: string): Object {
         const packageJson = {
             name,
             main: 'index.js',
@@ -62,6 +78,6 @@ class PackageManager {
 
 }
 
-const packageInstaller = new PackageManager();
+const packageManager = new PackageManager();
 
-export default packageInstaller;
+export default packageManager;

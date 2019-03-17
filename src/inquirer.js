@@ -1,6 +1,6 @@
 // @flow
 import inquirer, { type Questions } from 'inquirer';
-import { type PackageManagerType } from './type';
+import { type PackageManagerPlatform, type TypeCheckerPlatform } from './type';
 
 async function inquer(questions: Questions) {
     const answers = await inquirer.prompt([questions]);
@@ -9,13 +9,15 @@ async function inquer(questions: Questions) {
 
 export class InquirerRobot {
     _description: string = '';
-    _pkgManager: PackageManagerType = 'npm';
+    _pkgManager: PackageManagerPlatform = 'npm';
+    _typeChecker: TypeCheckerPlatform = 'none';
 
     async run() {
         this._description = await inquer({
             name: 'ProjectDescription',
             message: 'The project description'
         });
+
         this._pkgManager = await inquer({
             type: 'list',
             name: 'PackageManager',
@@ -25,14 +27,28 @@ export class InquirerRobot {
                 'yarn'
             ]
         });
+
+        this._typeChecker = await inquer({
+            type: 'list',
+            name: 'TypeChecker',
+            message: 'Do you want to use type checker?',
+            choices: [
+                'none',
+                'flow'
+            ]
+        });
     }
 
     get description(): string {
         return this._description;
     }
 
-    get pkgManager(): PackageManagerType {
+    get pkgManager(): PackageManagerPlatform {
         return this._pkgManager;
+    }
+
+    get typeChecker(): TypeCheckerPlatform {
+        return this._typeChecker;
     }
 }
 
