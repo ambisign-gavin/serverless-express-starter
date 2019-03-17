@@ -21,12 +21,24 @@ class Eslint {
     }
 
     rejectParserConfig(projectPath: string) {
-        if (fs.existsSync(join(projectPath, '.eslintrc.js'))) {
-            let eslintrc: { default: Object, parser: string } = require(join(projectPath, '.eslintrc.js'));
+        const jsConfig = join(projectPath, '.eslintrc.js');
+        if (fs.existsSync(jsConfig)) {
+            let eslintrc: { default: Object, parser: string } = require(jsConfig);
             delete eslintrc['default'];
             eslintrc['parser'] = 'babel-eslint';
             const newEslintrc = 'module.exports = ' + JSON.stringify(eslintrc, null, 4) + '\n';
-            fs.writeFileSync(join(projectPath, '.eslintrc.js'), newEslintrc);
+            fs.writeFileSync(jsConfig, newEslintrc);
+        }
+
+        const jsonConfig = join(projectPath, '.eslintrc.json');
+        if (fs.existsSync(jsonConfig)) {
+            let eslintrc = require(jsonConfig);
+            eslintrc = {
+                ...eslintrc,
+                parser: 'babel-eslint'
+            };
+            const newEslintrc = JSON.stringify(eslintrc, null, 4) + '\n';
+            fs.writeFileSync(jsonConfig, newEslintrc);
         }
     }
 }
