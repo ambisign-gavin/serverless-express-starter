@@ -15,6 +15,7 @@
   "license": "MIT",
   "dependencies": {
     "chalk": "^2.4.2",
+    "del": "^4.0.0",
     "eslint": "^5.15.2",
     "flow-bin": "^0.95.1",
     "shelljs": "^0.8.3",
@@ -25,6 +26,8 @@
     "@babel/core": "^7.3.4",
     "@babel/plugin-transform-flow-strip-types": "^7.3.4",
     "@babel/preset-env": "^7.3.4",
+    "eslint-plugin-flow": "^2.29.1",
+    "eslint-plugin-flowtype": "^3.4.2",
     "rimraf": "^2.6.3"
   }
 }
