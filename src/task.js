@@ -6,6 +6,7 @@ import fs, { writeFileSync } from 'fs';
 import del from 'del';
 import { join } from 'path';
 import execa from 'execa';
+import inquirerRobot from './inquirer';
 
 export function commandChecker(args: Args): boolean {
     const prjectName = args.name;
@@ -23,6 +24,8 @@ export async function initProject(args: Args) {
         console.log(chalk.red('Folder is already existed'));
         return;
     }
+    await inquirerRobot.run();
+
     const projectPath = join(process.cwd(), projectName);
 
     await execa('git', [
@@ -36,6 +39,7 @@ export async function initProject(args: Args) {
         join(projectPath, 'bin'),
         join(projectPath, '.gitignore'),
         join(projectPath, '.babelrc'),
+        join(projectPath, '.git'),
     ]);
     
     shell.cp('-R', join(projectPath, 'template/default/*'), projectPath);
@@ -48,7 +52,7 @@ export async function initProject(args: Args) {
         name: projectName,
         main: 'index.js',
         version: '1.0.0',
-        description: '', //todo: Enter by user
+        description: inquirerRobot.description,
         scripts: {
             'build': 'babel src/ -d lib/',
             'local': 'npm run build && sls offline start',
