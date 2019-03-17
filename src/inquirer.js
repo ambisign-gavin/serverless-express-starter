@@ -1,25 +1,38 @@
 // @flow
-import inquirer from 'inquirer';
+import inquirer, { type Questions } from 'inquirer';
+import { type PackageManagerType } from './type';
 
-async function inquireDdescription(): any {
-    const answers = await inquirer.prompt([
-        {
-            name: 'description',
-            message: 'The project description'
-        }
-    ]);
-    return answers['description'];
+async function inquer(questions: Questions) {
+    const answers = await inquirer.prompt([questions]);
+    return answers[questions.name];
 }
 
 export class InquirerRobot {
     _description: string = '';
+    _pkgManager: PackageManagerType = 'npm';
 
     async run() {
-        this._description = await inquireDdescription();
+        this._description = await inquer({
+            name: 'ProjectDescription',
+            message: 'The project description'
+        });
+        this._pkgManager = await inquer({
+            type: 'list',
+            name: 'PackageManager',
+            message: 'npm or yarn',
+            choices: [
+                'npm',
+                'yarn'
+            ]
+        });
     }
 
     get description(): string {
         return this._description;
+    }
+
+    get pkgManager(): PackageManagerType {
+        return this._pkgManager;
     }
 }
 

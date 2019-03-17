@@ -7,6 +7,7 @@ import del from 'del';
 import { join } from 'path';
 import execa from 'execa';
 import inquirerRobot from './inquirer';
+import packageInstaller from './packageManager';
 
 export function commandChecker(args: Args): boolean {
     const prjectName = args.name;
@@ -40,6 +41,7 @@ export async function initProject(args: Args) {
         join(projectPath, '.gitignore'),
         join(projectPath, '.babelrc'),
         join(projectPath, '.git'),
+        join(projectPath, 'package-lock.json'),
     ]);
     
     shell.cp('-R', join(projectPath, 'template/default/*'), projectPath);
@@ -48,46 +50,14 @@ export async function initProject(args: Args) {
         join(projectPath, 'template'),
     ]);
 
-    const packageContext = {
-        name: projectName,
-        main: 'index.js',
-        version: '1.0.0',
-        description: inquirerRobot.description,
-        scripts: {
-            'build': 'babel src/ -d lib/',
-            'local': 'npm run build && sls offline start',
-            'deploy:dev': 'npm run build && serverless deploy --stage dev',
-            'confirm-production': 'cli-confirm \' Do you want to deploy production server? \'',
-            'deploy-production': 'npm run confirm-production && npm run build && serverless deploy --stage production'
-        },
-        dependencies: {},
-        devDependencies: {},
-        keywords: [],
-    };
+    const packageContext = packageInstaller.generatePackageJson(
+        inquirerRobot.pkgManager,
+        projectName,
+        inquirerRobot.description
+    );
 
     writeFileSync(join(projectPath, 'package.json'), JSON.stringify(packageContext, null, 2) + '\n');
 
-    await execa('npm',[
-        'install',
-        '--save',
-        'express@^4.0.0',
-        'serverless-http@^1.0.0',
-    ], {
-        cwd: projectPath,
-        stdio: 'inherit'
-    });
-
-    await execa('npm',[
-        'install',
-        '--save-dev',
-        '@babel/cli@^7.0.0',
-        '@babel/core@^7.0.0',
-        '@babel/plugin-transform-modules-commonjs@^7.0.0',
-        'cli-confirm@^1.0.0',
-        'serverless-offline@^4.0.0',
-    ], {
-        cwd: projectPath,
-        stdio: 'inherit'
-    });
+    packageInstaller.install(inquirerRobot.pkgManager, projectPath);
     
 }
