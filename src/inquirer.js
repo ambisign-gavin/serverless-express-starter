@@ -8,12 +8,18 @@ async function inquer(questions: Questions) {
 }
 
 export class InquirerRobot {
+    _name: string = '';
     _description: string = '';
     _pkgManager: PackageManagerPlatform = 'npm';
     _typeChecker: TypeCheckerPlatform = 'none';
     _isUsedEslint: boolean = false;
 
     async run() {
+        this._name = await inquer({
+            name: 'ProjectName',
+            message: 'What\'s name for this project?'
+        });
+
         this._description = await inquer({
             name: 'ProjectDescription',
             message: 'The project description'
@@ -44,6 +50,10 @@ export class InquirerRobot {
             name: 'UseEslint',
             message: 'Do you want to use eslint?'
         });
+    }
+
+    get name(): string {
+        return this._name;
     }
 
     get description(): string {

@@ -2,19 +2,6 @@
 import execa from 'execa';
 import { type PackageManagerPlatform } from './type';
 
-const dependenciesModule = [
-    'express@^4.0.0',
-    'serverless-http@^1.0.0',
-];
-
-const devDependenciesModule = [
-    '@babel/cli@^7.0.0',
-    '@babel/core@^7.0.0',
-    '@babel/plugin-transform-modules-commonjs@^7.0.0',
-    'cli-confirm@^1.0.0',
-    'serverless-offline@^4.0.0',
-];
-
 class PackageManager {
     async install(packageManager: PackageManagerPlatform, projectPath: string, packages: Array<string>, isDev: boolean = false): Promise<void> {
         try {
@@ -36,26 +23,6 @@ class PackageManager {
         }
         return Promise.resolve();
     }
-
-    async installDefault(packageManager: PackageManagerPlatform, projectPath: string): Promise<void> {
-        try {
-            await this.install(
-                packageManager,
-                projectPath,
-                dependenciesModule
-            );
-            await this.install(
-                packageManager,
-                projectPath,
-                devDependenciesModule,
-                true,
-            );
-        } catch (error) {
-            return Promise.reject(error);
-        }
-        return Promise.resolve();
-    }
-
     generatePackageJson(packageManager: PackageManagerPlatform, name: string, description: string): Object {
         const packageJson = {
             name,

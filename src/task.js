@@ -1,91 +1,123 @@
 // @flow
-import { type Args } from './type';
 import chalk from 'chalk';
-import fs, { writeFileSync } from 'fs';
+import { writeFileSync } from 'fs';
 import del from 'del';
 import { join } from 'path';
 import execa from 'execa';
-import inquirerRobot from './inquirer';
+import inquirerRobot, { InquirerRobot } from './inquirer';
 import packageManager from './packageManager';
 import typeChecker from './typeChecker';
 import eslint from './eslint';
 
-export function commandChecker(args: Args): boolean {
-    const prjectName = args.name;
-    if (prjectName == undefined || prjectName === '') {
-        console.log(chalk.red('Please use --name to spcified location'));
-        return false;
-    }
-    return true;
-}
-
-export async function initProject(args: Args) {
-    const projectName = args.name;
-    
-    if(fs.existsSync(projectName)) {
-        console.log(chalk.red('Folder is already existed'));
-        return;
-    }
+export async function initProject() {
     await inquirerRobot.run();
 
-    const projectPath = join(process.cwd(), projectName);
-    const pkgManagerPlatform = inquirerRobot.pkgManager;
-    const typeChackerPlatform = inquirerRobot.typeChecker;
+    if (inquirerRobot.name.trim().length === 0) {
+        console.log(chalk.red('Please enter the project name.'));
+        return;
+    }
+    await createFiles(inquirerRobot);
+    await installPackages(inquirerRobot);
+    await runExtraSettings(inquirerRobot);
+}
 
-    await execa('git', [
-        'clone',
-        'https://github.com/ambisign-gavin/serverless-express-starter.git',
-        projectName
-    ]);
+async function createFiles(inquirerRobot: InquirerRobot) {
+    try {
+        const projectName = inquirerRobot.name;
+        const projectPath = join(process.cwd(), inquirerRobot.name);
+        const pkgManagerPlatform = inquirerRobot.pkgManager;
 
-    await del([
-        join(projectPath, 'src'),
-        join(projectPath, 'bin'),
-        join(projectPath, '.gitignore'),
-        join(projectPath, '.eslintrc.js'),
-        join(projectPath, '.flowconfig'),
-        join(projectPath, '.babelrc'),
-        join(projectPath, '.git'),
-        join(projectPath, 'package-lock.json'),
-    ]);
+        await execa('git', [
+            'clone',
+            'https://github.com/ambisign-gavin/serverless-express-starter.git',
+            projectName
+        ]);
 
-    execa.shellSync(`cp -a ${typeChecker.generateTemplatePath(inquirerRobot.typeChecker)}. ./`, {
-        cwd: projectPath
-    });
+        await del([
+            join(projectPath, 'src'),
+            join(projectPath, 'bin'),
+            join(projectPath, '.gitignore'),
+            join(projectPath, '.eslintrc.js'),
+            join(projectPath, '.flowconfig'),
+            join(projectPath, '.babelrc'),
+            join(projectPath, '.git'),
+            join(projectPath, 'package-lock.json'),
+        ]);
 
-    await del([
-        join(projectPath, 'template'),
-    ]);
+        execa.shellSync(`cp -a ${typeChecker.generateTemplatePath(inquirerRobot.typeChecker)}. ./`, {
+            cwd: projectPath
+        });
 
-    const packageContext = packageManager.generatePackageJson(
-        pkgManagerPlatform,
-        projectName,
-        inquirerRobot.description
-    );
+        await del([
+            join(projectPath, 'template'),
+        ]);
 
-    writeFileSync(join(projectPath, 'package.json'), JSON.stringify(packageContext, null, 2) + '\n');
-
-    await packageManager.installDefault(pkgManagerPlatform, projectPath);
-    if (typeChackerPlatform !== 'none') {
-        await packageManager.install(
-            pkgManagerPlatform, 
-            projectPath, 
-            typeChecker.getInstallPackage(typeChackerPlatform), 
-            true
+        const packageContext = packageManager.generatePackageJson(
+            pkgManagerPlatform,
+            projectName,
+            inquirerRobot.description
         );
-        await typeChecker.runExtraSettings(typeChackerPlatform, projectPath);
+
+        writeFileSync(join(projectPath, 'package.json'), JSON.stringify(packageContext, null, 2) + '\n');
+    } catch (error) {
+        console.log('create files error:', error);
     }
     
-    
-    if (inquirerRobot.isUsedEslint) {
+}
+
+async function installPackages(inquirerRobot: InquirerRobot) {
+    try {
+        let dependenciesModule = [
+            'express@^4.0.0',
+            'serverless-http@^1.0.0',
+        ];
+        
+        let devDependenciesModule = [
+            '@babel/cli@^7.0.0',
+            '@babel/core@^7.0.0',
+            '@babel/plugin-transform-modules-commonjs@^7.0.0',
+            'cli-confirm@^1.0.0',
+            'serverless-offline@^4.0.0',
+        ];
+
+        const projectPath = join(process.cwd(), inquirerRobot.name);
+        const pkgManagerPlatform = inquirerRobot.pkgManager;
+        const typeChackerPlatform = inquirerRobot.typeChecker;
+
+        if (typeChackerPlatform !== 'none') {
+            devDependenciesModule.push(...typeChecker.getInstallPackage(typeChackerPlatform));
+        }
+        
+        if (inquirerRobot.isUsedEslint) {
+            devDependenciesModule.push(...eslint.getPackages());
+        }
+
         await packageManager.install(
-            pkgManagerPlatform, 
-            projectPath, 
-            ['eslint@^5.0.0', 'babel-eslint@^10.0.0'], 
-            true
+            pkgManagerPlatform,
+            projectPath,
+            dependenciesModule,
+            false,
         );
+
+        await packageManager.install(
+            pkgManagerPlatform,
+            projectPath,
+            devDependenciesModule,
+            true,
+        );
+    } catch (error) {
+        console.log('install packages error:', error);
+    }
+    
+}
+
+async function runExtraSettings(inquirerRobot: InquirerRobot) {
+    const projectPath = join(process.cwd(), inquirerRobot.name);
+    if (inquirerRobot.typeChecker !== 'none') {
+        await typeChecker.runExtraSettings(inquirerRobot.typeChecker, projectPath);
+    }
+    if (inquirerRobot.isUsedEslint) {
         await eslint.init(projectPath);
         eslint.rejectParserConfig(projectPath);
     }
-    
 }
