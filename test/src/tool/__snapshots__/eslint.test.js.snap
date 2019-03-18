@@ -1,0 +1,59 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Eslint should injection parser to js config correct 1`] = `
+"module.exports = {
+    \\"env\\": {
+        \\"es6\\": true,
+        \\"node\\": true
+    },
+    \\"extends\\": \\"eslint:recommended\\",
+    \\"globals\\": {
+        \\"Atomics\\": \\"readonly\\",
+        \\"SharedArrayBuffer\\": \\"readonly\\"
+    },
+    \\"parserOptions\\": {
+        \\"ecmaVersion\\": 2018,
+        \\"sourceType\\": \\"module\\"
+    },
+    \\"rules\\": {},
+    \\"parser\\": \\"babel-eslint\\"
+}
+"
+`;
+
+exports[`Eslint should injection parser to json config correct 1`] = `
+"{
+    \\"env\\": {
+        \\"es6\\": true,
+        \\"node\\": true
+    },
+    \\"extends\\": \\"eslint:recommended\\",
+    \\"globals\\": {
+        \\"Atomics\\": \\"readonly\\",
+        \\"SharedArrayBuffer\\": \\"readonly\\"
+    },
+    \\"parserOptions\\": {
+        \\"ecmaVersion\\": 2018,
+        \\"sourceType\\": \\"module\\"
+    },
+    \\"rules\\": {},
+    \\"parser\\": \\"babel-eslint\\"
+}
+"
+`;
+
+exports[`Eslint should injection parser to yaml config correct 1`] = `
+"env:
+  es6: true
+  node: true
+extends: eslint:recommended
+globals:
+  Atomics: readonly
+  SharedArrayBuffer: readonly
+parserOptions:
+  ecmaVersion: 2018
+  sourceType: module
+rules: {}
+parser: babel-eslint
+"
+`;
