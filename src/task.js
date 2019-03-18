@@ -61,7 +61,7 @@ async function createFiles(inquirerRobot: InquirerRobot) {
 
         writeFileSync(join(projectPath, 'package.json'), JSON.stringify(packageContext, null, 2) + '\n');
     } catch (error) {
-        console.log('create files error:', error);
+        console.log('An error occurred while creating files:', error);
     }
     
 }
@@ -107,21 +107,26 @@ async function installPackages(inquirerRobot: InquirerRobot) {
             true,
         );
     } catch (error) {
-        console.log('install packages error:', error);
+        console.log('An error occurred while installing packages:', error);
     }
     
 }
 
 async function runExtraSettings(inquirerRobot: InquirerRobot) {
-    const projectPath = join(process.cwd(), inquirerRobot.name);
-    if (inquirerRobot.typeChecker !== 'none') {
-        await typeChecker.runExtraSettings(inquirerRobot.typeChecker, projectPath);
+    try {
+        const projectPath = join(process.cwd(), inquirerRobot.name);
+        if (inquirerRobot.typeChecker !== 'none') {
+            await typeChecker.runExtraSettings(inquirerRobot.typeChecker, projectPath);
+        }
+        if (inquirerRobot.isUsedEslint) {
+            await eslint.init(projectPath);
+            eslint.rejectParserConfig(projectPath);
+            await eslint.fixScripts(projectPath);
+        }
+    } catch (error) {
+        console.log('An error occurred while setting plugins:', error);
     }
-    if (inquirerRobot.isUsedEslint) {
-        await eslint.init(projectPath);
-        eslint.rejectParserConfig(projectPath);
-        await eslint.fixScripts(projectPath);
-    }
+    
 }
 
 function showCompleteMessages() {
