@@ -54,6 +54,17 @@ class Eslint {
             fs.writeFileSync(ymlConfig, newEslintrc);
         }
     }
+
+    async fixScripts(projectPath: string): execa.ExecaChildProcess {
+        return execa('node_modules/eslint/bin/eslint.js',[
+            '--fix',
+            './src/*.js'
+        ], {
+            cwd: projectPath,
+            stdio: 'inherit'
+        });
+    }
+
 }
 
 const eslint = new Eslint();

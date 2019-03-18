@@ -119,5 +119,6 @@ async function runExtraSettings(inquirerRobot: InquirerRobot) {
     if (inquirerRobot.isUsedEslint) {
         await eslint.init(projectPath);
         eslint.rejectParserConfig(projectPath);
+        await eslint.fixScripts(projectPath);
     }
 }
