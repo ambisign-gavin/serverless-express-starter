@@ -1,7 +1,7 @@
 [ignore]
 <PROJECT_ROOT>/template/*
 [include]
-
+<PROJECT_ROOT>/flow-typed/npm/*
 [libs]
 
 [lints]

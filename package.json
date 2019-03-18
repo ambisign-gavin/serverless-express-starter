@@ -7,7 +7,7 @@
     "serverless-express-starter": "./bin/index.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "clean": "rimraf dist",
     "build": "npm run clean && babel src -d dist"
   },
@@ -34,6 +34,7 @@
     "babel-eslint": "^10.0.1",
     "eslint-plugin-flow": "^2.29.1",
     "eslint-plugin-flowtype": "^3.4.2",
+    "jest": "^24.5.0",
     "rimraf": "^2.6.3"
   }
 }
