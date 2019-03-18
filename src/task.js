@@ -86,11 +86,11 @@ async function installPackages(inquirerRobot: InquirerRobot) {
         const typeChackerPlatform = inquirerRobot.typeChecker;
 
         if (typeChackerPlatform !== 'none') {
-            devDependenciesModule.push(...typeChecker.getInstallPackage(typeChackerPlatform));
+            devDependenciesModule.push(...typeChecker.getInstallPackages(typeChackerPlatform));
         }
         
         if (inquirerRobot.isUsedEslint) {
-            devDependenciesModule.push(...eslint.getPackages());
+            devDependenciesModule.push(...eslint.getInstallPackages());
         }
 
         await packageManager.install(

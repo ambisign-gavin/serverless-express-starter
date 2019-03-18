@@ -14,7 +14,7 @@ class TypeChecker {
         }
     }
 
-    getInstallPackage(typeCheckerPlatform: TypeCheckerPlatform): Array<string> {
+    getInstallPackages(typeCheckerPlatform: TypeCheckerPlatform): Array<string> {
         if (typeCheckerPlatform === 'flow') {
             return [
                 'flow-bin@^0.95.0',

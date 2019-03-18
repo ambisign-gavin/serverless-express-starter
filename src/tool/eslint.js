@@ -5,7 +5,7 @@ import { join } from 'path';
 import YAML from 'yaml';
 
 class Eslint {
-    getPackages(): Array<string> {
+    getInstallPackages(): Array<string> {
         return [
             'eslint@^5.0.0',
             'babel-eslint@^10.0.0'
