@@ -1,5 +1,5 @@
 // @flow
-import { type TypeCheckerPlatform } from './type';
+import { type TypeCheckerPlatform } from '../type';
 import execa from 'execa';
 
 class TypeChecker {

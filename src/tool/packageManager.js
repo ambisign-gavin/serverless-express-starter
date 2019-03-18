@@ -1,6 +1,6 @@
 // @flow
 import execa from 'execa';
-import { type PackageManagerPlatform } from './type';
+import { type PackageManagerPlatform } from '../type';
 
 class PackageManager {
     async install(packageManager: PackageManagerPlatform, projectPath: string, packages: Array<string>, isDev: boolean = false): Promise<void> {

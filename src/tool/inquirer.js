@@ -1,6 +1,6 @@
 // @flow
 import inquirer, { type Questions } from 'inquirer';
-import { type PackageManagerPlatform, type TypeCheckerPlatform } from './type';
+import { type PackageManagerPlatform, type TypeCheckerPlatform } from '../type';
 
 async function inquer(questions: Questions) {
     const answers = await inquirer.prompt([questions]);

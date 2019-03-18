@@ -4,10 +4,10 @@ import { writeFileSync } from 'fs';
 import del from 'del';
 import { join } from 'path';
 import execa from 'execa';
-import inquirerRobot, { InquirerRobot } from './inquirer';
-import packageManager from './packageManager';
-import typeChecker from './typeChecker';
-import eslint from './eslint';
+import inquirerRobot, { InquirerRobot } from './tool/inquirer';
+import packageManager from './tool/packageManager';
+import typeChecker from './tool/typeChecker';
+import eslint from './tool/eslint';
 
 export async function initProject() {
     await inquirerRobot.run();
