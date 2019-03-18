@@ -1,6 +1,8 @@
 // @flow
 import inquirer, { type Questions } from 'inquirer';
 import { type PackageManagerPlatform, type TypeCheckerPlatform } from '../type';
+import { existsSync } from 'fs';
+import { join } from 'path';
 
 async function inquer(questions: Questions) {
     const answers = await inquirer.prompt([questions]);
@@ -17,18 +19,24 @@ export class InquirerRobot {
     async run() {
         this._name = await inquer({
             name: 'ProjectName',
-            message: 'What\'s name for this project?'
+            message: 'What\'s the amazing name for this project?',
+            validate: (name) => {
+                if(existsSync(join(process.cwd(), name))) {
+                    return 'This amazing name already exists.';
+                }
+                return true;
+            }
         });
 
         this._description = await inquer({
             name: 'ProjectDescription',
-            message: 'The project description'
+            message: 'How to describe this mighty project?'
         });
 
         this._pkgManager = await inquer({
             type: 'list',
             name: 'PackageManager',
-            message: 'npm or yarn',
+            message: 'Will this project use npm or yarn?',
             choices: [
                 'npm',
                 'yarn'
