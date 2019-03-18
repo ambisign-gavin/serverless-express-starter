@@ -10,6 +10,10 @@ jest.mock('fs');
 
 describe('Eslint', () => {
 
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
+
     it('should get install packages correct', () => {
         expect(eslint.getInstallPackages()).toEqual([
             'eslint@^5.0.0',
