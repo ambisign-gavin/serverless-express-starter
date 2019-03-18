@@ -19,7 +19,7 @@ export class InquirerRobot {
     async run() {
         this._name = await inquer({
             name: 'ProjectName',
-            message: 'What\'s the amazing name for this project?',
+            message: 'How to name this mighty project?',
             validate: (name) => {
                 if(existsSync(join(process.cwd(), name))) {
                     return 'This amazing name already exists.';
