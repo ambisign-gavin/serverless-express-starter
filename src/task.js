@@ -19,6 +19,7 @@ export async function initProject() {
     await createFiles(inquirerRobot);
     await installPackages(inquirerRobot);
     await runExtraSettings(inquirerRobot);
+    showCompleteMessages();
 }
 
 async function createFiles(inquirerRobot: InquirerRobot) {
@@ -121,4 +122,19 @@ async function runExtraSettings(inquirerRobot: InquirerRobot) {
         eslint.rejectParserConfig(projectPath);
         await eslint.fixScripts(projectPath);
     }
+}
+
+function showCompleteMessages() {
+    const messages = `
+It's all done! You can start to develop your mighty project!
+
+You can use:
+
+  npm/yarn run local               Run the local server.
+  npm/yarn run deploy:dev          Deploy the server of dev stage.
+  npm/yarn run deploy:production   Deploy the server of production stage.
+
+Enjoy it!
+    `;
+    console.log(chalk.green(messages));
 }
