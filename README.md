@@ -22,6 +22,13 @@ A tool you can simply use one command to create the project for the Serverless a
   npm/yarn run deploy:production   Deploy the server of production stage.
 ```
 
+## Configure deployment credentials
+
+Please read docs on the Serverless website.
+- [AWS](https://serverless.com/framework/docs/providers/aws/guide/credentials/)
+
+
+
 ## Todos
 
 - [ ] Support TypeScript
