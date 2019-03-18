@@ -11,18 +11,15 @@ export async function run() {
         yargs.showHelp();
         return;
     }
-    let isRequiredTool = await isRequiredToolHasInstalled();
-    if (!isRequiredTool) {
+    if (!isRequiredToolHasInstalled()) {
         return;
     }
     initProject();
 }
 
-async function isRequiredToolHasInstalled(): Promise<boolean> {
+function isRequiredToolHasInstalled(): boolean {
     try {
-        await execa.shell('which', [
-            'git'
-        ]);
+        execa.shellSync('which git');
     } catch (error) {
         console.log(chalk.red('serverless-express-started need installed git.'));
         return false;
