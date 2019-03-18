@@ -2,7 +2,7 @@
 
 A tool you can simply use one command to create the project for the Serverless and Express.
 
-<img src="https://raw.githubusercontent.com/ambisign-gavin/serverless-express-starter/master/demo.gif" width="310"/>
+<img src="demo.gif" width="600"/>
 
 ## Start
 
