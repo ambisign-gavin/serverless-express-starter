@@ -12,7 +12,7 @@ class Eslint {
         ];
     }
 
-    async init(projectPath: string): execa.ExecaChildProcess {
+    init(projectPath: string): execa.ExecaChildProcess {
         return execa('node_modules/eslint/bin/eslint.js',[
             '--init'
         ], {
@@ -55,7 +55,7 @@ class Eslint {
         }
     }
 
-    async fixScripts(projectPath: string): execa.ExecaChildProcess {
+    fixScripts(projectPath: string): execa.ExecaChildProcess {
         return execa('node_modules/eslint/bin/eslint.js',[
             '--fix',
             './src/*.js'

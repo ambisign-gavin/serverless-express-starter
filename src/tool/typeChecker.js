@@ -25,9 +25,9 @@ class TypeChecker {
         return [];
     }
     
-    async runExtraSettings(typeCheckerPlatform: TypeCheckerPlatform, projectPath: string) {
+    runExtraSettings(typeCheckerPlatform: TypeCheckerPlatform, projectPath: string): execa.ExecaChildProcess {
         if (typeCheckerPlatform === 'flow') {
-            await execa('flow-typed', [
+            return execa('flow-typed', [
                 'install',
                 'express@^4.0.0'
             ], {
