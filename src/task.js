@@ -22,7 +22,7 @@ export async function initProject() {
     showCompleteMessages();
 }
 
-async function createFiles(inquirerRobot: InquirerRobot) {
+export async function createFiles(inquirerRobot: InquirerRobot) {
     try {
         const projectName = inquirerRobot.name;
         const projectPath = join(process.cwd(), inquirerRobot.name);
@@ -66,7 +66,7 @@ async function createFiles(inquirerRobot: InquirerRobot) {
     
 }
 
-async function installPackages(inquirerRobot: InquirerRobot) {
+export async function installPackages(inquirerRobot: InquirerRobot) {
     try {
         let dependenciesModule = [
             'express@^4.0.0',
@@ -112,7 +112,7 @@ async function installPackages(inquirerRobot: InquirerRobot) {
     
 }
 
-async function runExtraSettings(inquirerRobot: InquirerRobot) {
+export async function runExtraSettings(inquirerRobot: InquirerRobot) {
     try {
         const projectPath = join(process.cwd(), inquirerRobot.name);
         if (inquirerRobot.typeChecker !== 'none') {

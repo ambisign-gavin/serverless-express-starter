@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Create files task should write package.json correct 1`] = `
+"{
+  \\"name\\": \\"my-server\\",
+  \\"main\\": \\"index.js\\",
+  \\"version\\": \\"1.0.0\\",
+  \\"description\\": \\"This is my server.\\",
+  \\"scripts\\": {
+    \\"build\\": \\"babel src/ -d lib/\\"
+  },
+  \\"dependencies\\": {},
+  \\"devDependencies\\": {},
+  \\"keywords\\": []
+}
+"
+`;
