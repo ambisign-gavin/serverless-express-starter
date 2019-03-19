@@ -27,5 +27,5 @@ You can use:
   npm/yarn run deploy:production   Deploy the server of production stage.
 
 Enjoy it!
-    "
+        "
 `;

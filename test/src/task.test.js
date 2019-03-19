@@ -1,6 +1,6 @@
 // @flow
 import execa from 'execa';
-import { createFiles, installPackages, runExtraSettings, showCompleteMessages } from '../../src/task';
+import task from '../../src/task';
 import inquirerRobot from '../../src/tool/inquirer';
 import del from 'del';
 import fs from 'fs';
@@ -51,7 +51,7 @@ describe('Create files task', () => {
     beforeEach(async () => {
         jest.clearAllMocks();
         spyInquirerRobotDefaultValue();
-        await createFiles(inquirerRobot);
+        await task.createFiles(inquirerRobot);
     });
 
     it('should clone git correct', () => {
@@ -116,7 +116,7 @@ describe('Install packages task', () => {
 
     it('should install correct with no typeChecker', async () => {
         jest.spyOn(inquirerRobot, 'typeChecker', 'get').mockReturnValue('none');
-        await installPackages(inquirerRobot);
+        await task.installPackages(inquirerRobot);
         expect(packageManager.install.mock.calls.length).toEqual(2);
         expect(packageManager.install.mock.calls[0][0]).toEqual('npm');
         expect(packageManager.install.mock.calls[0][1]).toEqual('/test/my-server');
@@ -140,7 +140,7 @@ describe('Install packages task', () => {
 
     it('should install correct with typeChecker', async () => {
         jest.spyOn(inquirerRobot, 'typeChecker', 'get').mockReturnValue('flow');
-        await installPackages(inquirerRobot);
+        await task.installPackages(inquirerRobot);
         expect(packageManager.install.mock.calls.length).toEqual(2);
         expect(packageManager.install.mock.calls[0][0]).toEqual('npm');
         expect(packageManager.install.mock.calls[0][1]).toEqual('/test/my-server');
@@ -165,7 +165,7 @@ describe('Install packages task', () => {
 
     it('should install correct with no eslint', async () => {
         jest.spyOn(inquirerRobot, 'isUsedEslint', 'get').mockReturnValue(false);
-        await installPackages(inquirerRobot);
+        await task.installPackages(inquirerRobot);
         expect(packageManager.install.mock.calls.length).toEqual(2);
         expect(packageManager.install.mock.calls[0][0]).toEqual('npm');
         expect(packageManager.install.mock.calls[0][1]).toEqual('/test/my-server');
@@ -189,7 +189,7 @@ describe('Install packages task', () => {
 
     it('should install correct with typeChecker', async () => {
         jest.spyOn(inquirerRobot, 'isUsedEslint', 'get').mockReturnValue(true);
-        await installPackages(inquirerRobot);
+        await task.installPackages(inquirerRobot);
         expect(packageManager.install.mock.calls.length).toEqual(2);
         expect(packageManager.install.mock.calls[0][0]).toEqual('npm');
         expect(packageManager.install.mock.calls[0][1]).toEqual('/test/my-server');
@@ -227,13 +227,13 @@ describe('Setting task', () => {
 
     it('should setting correct with type checker', async () => {
         jest.spyOn(inquirerRobot, 'typeChecker', 'get').mockReturnValue('flow');
-        await runExtraSettings(inquirerRobot);
+        await task.runExtraSettings(inquirerRobot);
         expect(typeChecker.runExtraSettings.mock.calls.length).toEqual(1);
     });
 
     it('should setting correct with eslint', async () => {
         jest.spyOn(inquirerRobot, 'isUsedEslint', 'get').mockReturnValue(true);
-        await runExtraSettings(inquirerRobot);
+        await task.runExtraSettings(inquirerRobot);
         expect(eslint.init.mock.calls.length).toEqual(1);
         expect(eslint.rejectParserConfig.mock.calls.length).toEqual(1);
         expect(eslint.fixScripts.mock.calls.length).toEqual(1);
@@ -244,7 +244,7 @@ describe('Setting task', () => {
 describe('Show complete message of task', () => {
     it('should showed correct', () => {
         let log = jest.spyOn(console, 'log');
-        showCompleteMessages();
+        task.showCompleteMessages();
         expect(log.mock.calls.length).toEqual(1);
         expect(log.mock.calls[0][0]).toMatchSnapshot();
     });

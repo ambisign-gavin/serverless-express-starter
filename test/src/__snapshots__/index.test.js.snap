@@ -1,14 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Runing command should show error when not installed git 1`] = `"serverless-express-started need to install git."`;
-
-exports[`Runing command should show help when unknow options 1`] = `
+exports[`Runing command with options should show help when unknow options 1`] = `
 "
 Usage: serverless-express-starter <command>
 "
 `;
 
-exports[`Runing command should show help when unknow options 2`] = `
+exports[`Runing command with options should show help when unknow options 2`] = `
 "where <command> is one of:
 "
 `;
+
+exports[`Runing command without git should show error when not installed git 1`] = `"serverless-express-started need to install git."`;

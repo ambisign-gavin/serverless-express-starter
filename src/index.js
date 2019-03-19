@@ -1,8 +1,9 @@
 // @flow
-import { initProject } from './task';
+import task from './task';
 import yargs, { argv } from 'yargs';
 import execa from 'execa';
 import chalk from 'chalk';
+import inquirerRobot from './tool/inquirer';
 
 export async function run() {
     if (Object.keys(argv).length > 2) {
@@ -14,7 +15,20 @@ export async function run() {
     if (!isRequiredToolHasInstalled()) {
         return;
     }
-    initProject();
+    await initProject();
+}
+
+export async function initProject() {
+    await inquirerRobot.run();
+
+    if (inquirerRobot.name.trim().length === 0) {
+        console.log(chalk.red('Please enter the project name.'));
+        return;
+    }
+    await task.createFiles(inquirerRobot);
+    await task.installPackages(inquirerRobot);
+    await task.runExtraSettings(inquirerRobot);
+    task.showCompleteMessages();
 }
 
 function isRequiredToolHasInstalled(): boolean {

@@ -2,27 +2,37 @@
 import yargs from 'yargs';
 import { run } from '../../src';
 import execa from 'execa';
-import { initProject } from '../../src/task';
+import task from '../../src/task';
+import inquirerRobot from '../../src/tool/inquirer';
 
 jest.mock('yargs');
 jest.mock('execa');
 jest.mock('../../src/task');
 jest.mock('chalk', () => ({
-    red: jest.fn().mockImplementation(text => text)
+    red: jest.fn().mockImplementation(text => text),
 }));
 
-describe('Runing command', () => {
+function spyInquirerRobotDefaultValue() {
+    jest.spyOn(inquirerRobot, 'name', 'get').mockReturnValue('my-server');
+    jest.spyOn(inquirerRobot, 'pkgManager', 'get').mockReturnValue('npm');
+    jest.spyOn(inquirerRobot, 'typeChecker', 'get').mockReturnValue('none');
+    jest.spyOn(inquirerRobot, 'isUsedEslint', 'get').mockReturnValue(false);
+    jest.spyOn(inquirerRobot, 'run').mockReturnValue(Promise.resolve());
+}
 
-    beforeEach(() => {
+describe('Runing command with options', () => {
+
+    beforeAll(() => {
         jest.clearAllMocks();
-    });
-
-    it('should show help when unknow options', async () => {
         jest.spyOn(Object, 'keys').mockReturnValueOnce([
             '1',
             '2',
             '3'
         ]);
+    });
+
+    it('should show help when unknow options', async () => {
+        
         let log = jest.spyOn(console, 'log');
         await run();
         expect(log.mock.calls.length).toEqual(2);
@@ -31,22 +41,44 @@ describe('Runing command', () => {
         expect(yargs.showHelp.mock.calls.length).toEqual(1);
     });
 
-    it('should show error when not installed git', async () => {
+});
+
+describe('Runing command without git', () => {
+
+    beforeAll(() => {
+        jest.clearAllMocks();
         jest.spyOn(Object, 'keys').mockReturnValueOnce([]);
         execa.shellSync.mockImplementation(() => {
             throw 'Error';
         });
+    });
+
+    it('should show error when not installed git', async () => {
         let log = jest.spyOn(console, 'log');
         await run();
         expect(execa.shellSync.mock.calls.length).toEqual(1);
         expect(log.mock.calls.length).toEqual(1);
         expect(log.mock.calls[0][0]).toMatchSnapshot();
     });
+    
+});
 
-    it('should init project correct', async () => {
+describe('Runing command', () => {
+
+    beforeAll(() => {
+        jest.clearAllMocks();
         jest.spyOn(Object, 'keys').mockReturnValueOnce([]);
-        execa.shellSync.mockReturnValueOnce();
-        await run();
-        expect(initProject.mock.calls.length).toEqual(1);
+        execa.shellSync.mockReturnValue();
+        spyInquirerRobotDefaultValue();
     });
+
+    it('should init project success', async () => {
+        await run();
+        expect(inquirerRobot.run.mock.calls.length).toEqual(1);
+        expect(task.createFiles.mock.calls.length).toEqual(1);
+        expect(task.installPackages.mock.calls.length).toEqual(1);
+        expect(task.runExtraSettings.mock.calls.length).toEqual(1);
+        expect(task.showCompleteMessages.mock.calls.length).toEqual(1);
+    });
+    
 });
