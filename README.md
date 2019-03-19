@@ -39,5 +39,5 @@ Please read docs on the Serverless website.
 <hr/>
 
 <a href="https://www.gavinwang.net" target="_blank">
-  <img src="https://github.com/ambisign-gavin/about-me-footer-for-docs/blob/master/aboutFooter.svg" height="60"/>
+  <img src="https://raw.githubusercontent.com/ambisign-gavin/about-me-footer-for-docs/master/aboutFooter.png" height="60"/>
 </a>
