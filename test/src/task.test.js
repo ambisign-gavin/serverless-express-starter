@@ -235,7 +235,7 @@ describe('Setting task', () => {
         jest.spyOn(inquirerRobot, 'isUsedEslint', 'get').mockReturnValue(true);
         await task.runExtraSettings(inquirerRobot);
         expect(eslint.init.mock.calls.length).toEqual(1);
-        expect(eslint.rejectParserConfig.mock.calls.length).toEqual(1);
+        expect(eslint.injectionParserConfig.mock.calls.length).toEqual(1);
         expect(eslint.fixScripts.mock.calls.length).toEqual(1);
     });
 

@@ -108,7 +108,7 @@ class Task {
             }
             if (inquirerRobot.isUsedEslint) {
                 await eslint.init(projectPath);
-                eslint.rejectParserConfig(projectPath);
+                eslint.injectionParserConfig(projectPath);
                 await eslint.fixScripts(projectPath);
             }
         } catch (error) {

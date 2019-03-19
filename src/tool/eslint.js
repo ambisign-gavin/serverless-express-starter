@@ -21,7 +21,7 @@ class Eslint {
         });
     }
 
-    rejectParserConfig(projectPath: string) {
+    injectionParserConfig(projectPath: string) {
         const jsConfig = join(projectPath, '.eslintrc.js');
         if (fs.existsSync(jsConfig)) {
             let eslintrc: { default: Object, parser: string } = require(jsConfig);

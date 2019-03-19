@@ -39,7 +39,7 @@ describe('Eslint', () => {
         fs.existsSync.mockImplementation((path) => {
             return /.*(js)$/.test(path);
         });
-        eslint.rejectParserConfig(path);
+        eslint.injectionParserConfig(path);
         expect(fs.writeFileSync.mock.calls.length).toEqual(1);
         expect(fs.writeFileSync.mock.calls[0][0]).toEqual(join(path, '.eslintrc.js'));
         expect(fs.writeFileSync.mock.calls[0][1]).toMatchSnapshot();
@@ -50,7 +50,7 @@ describe('Eslint', () => {
         fs.existsSync.mockImplementation((path) => {
             return /.*(json)$/.test(path);
         });
-        eslint.rejectParserConfig(path);
+        eslint.injectionParserConfig(path);
         expect(fs.writeFileSync.mock.calls.length).toEqual(1);
         expect(fs.writeFileSync.mock.calls[0][0]).toEqual(join(path, '.eslintrc.json'));
         expect(fs.writeFileSync.mock.calls[0][1]).toMatchSnapshot();
@@ -77,7 +77,7 @@ describe('Eslint', () => {
             },
             rules: {}
         });
-        eslint.rejectParserConfig(path);
+        eslint.injectionParserConfig(path);
         expect(fs.writeFileSync.mock.calls.length).toEqual(1);
         expect(fs.writeFileSync.mock.calls[0][0]).toEqual(join(path, '.eslintrc.yml'));
         expect(fs.writeFileSync.mock.calls[0][1]).toMatchSnapshot();
