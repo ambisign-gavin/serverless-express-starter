@@ -21,7 +21,7 @@ function isRequiredToolHasInstalled(): boolean {
     try {
         execa.shellSync('which git');
     } catch (error) {
-        console.log(chalk.red('serverless-express-started need to install it.'));
+        console.log(chalk.red('serverless-express-started need to install git.'));
         return false;
     }
     return true;
