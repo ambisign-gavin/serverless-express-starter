@@ -36,5 +36,8 @@ Please read docs on the Serverless website.
 - [ ] Support Test Tools
 - [ ] Support custom Serverless plugins
 
-------
-<iframe src='https://ambisign-gavin.github.io/about-me-footer-for-docs?cache=0' style='border-width: 0; width: 500px'  />
+<hr/>
+
+<a href="https://www.gavinwang.net" target="_blank">
+  <img src="https://github.com/ambisign-gavin/about-me-footer-for-docs/blob/master/aboutFooter.svg" height="60"/>
+</a>
