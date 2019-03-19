@@ -1,0 +1,10 @@
+node_modules
+template
+test
+src
+flow-typed
+demo.gif
+jest.config.jest
+.flowconfig
+.eslintrc.js
+.babelrc

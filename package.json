@@ -2,17 +2,16 @@
   "name": "serverless-express-starter",
   "version": "1.0.0",
   "description": "A quick starter for serverless",
-  "main": "dist/cli.js",
+  "main": "dist/index.js",
   "bin": {
     "serverless-express-starter": "./bin/index.js"
   },
   "scripts": {
     "test": "jest",
     "clean": "rimraf dist",
-    "build": "npm run clean && babel src -d dist"
+    "build": "npm run clean && babel src -d dist",
+    "prepublish": "npm run clean && npm run build"
   },
-  "author": "gavin",
-  "license": "MIT",
   "dependencies": {
     "@babel/runtime": "^7.3.4",
     "chalk": "^2.4.2",
@@ -36,5 +35,21 @@
     "eslint-plugin-flowtype": "^3.4.2",
     "jest": "^24.5.0",
     "rimraf": "^2.6.3"
-  }
+  },
+  "keywords": [
+    "serverless",
+    "express",
+    "starter",
+    "template",
+    "boilerplate",
+    "serverless-express",
+    "flow",
+    "eslint"
+  ],
+  "author": "Gavin Wang <kuku8990@gmail.com> (https://github.com/ambisign-gavin)",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:ambisign-gavin/serverless-express-starter.git"
+  },
+  "license": "MIT"
 }
