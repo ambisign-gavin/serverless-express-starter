@@ -1,6 +1,6 @@
 // @flow
 import execa from 'execa';
-import { createFiles, installPackages, runExtraSettings } from '../../src/task';
+import { createFiles, installPackages, runExtraSettings, showCompleteMessages } from '../../src/task';
 import inquirerRobot from '../../src/tool/inquirer';
 import del from 'del';
 import fs from 'fs';
@@ -11,6 +11,9 @@ import eslint from '../../src/tool/eslint';
 jest.mock('execa');
 jest.mock('del');
 jest.mock('fs');
+jest.mock('chalk', () => ({
+    green: jest.fn().mockImplementation(text => text)
+}));
 jest.mock('../../src/tool/eslint');
 jest.mock('../../src/tool/typeChecker');
 jest.mock('../../src/tool/packageManager');
@@ -236,4 +239,13 @@ describe('Setting task', () => {
         expect(eslint.fixScripts.mock.calls.length).toEqual(1);
     });
 
+});
+
+describe('Show complete message of task', () => {
+    it('should showed correct', () => {
+        let log = jest.spyOn(global.console, 'log');
+        showCompleteMessages();
+        expect(log.mock.calls.length).toEqual(1);
+        expect(log.mock.calls[0][0]).toMatchSnapshot();
+    });
 });

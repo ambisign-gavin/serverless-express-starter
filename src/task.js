@@ -129,7 +129,7 @@ export async function runExtraSettings(inquirerRobot: InquirerRobot) {
     
 }
 
-function showCompleteMessages() {
+export function showCompleteMessages() {
     const messages = `
 It's all done! You can start to develop your mighty project!
 

@@ -15,3 +15,17 @@ exports[`Create files task should write package.json correct 1`] = `
 }
 "
 `;
+
+exports[`Show complete message of task should showed correct 1`] = `
+"
+It's all done! You can start to develop your mighty project!
+
+You can use:
+
+  npm/yarn run local               Run the local server.
+  npm/yarn run deploy:dev          Deploy the server of dev stage.
+  npm/yarn run deploy:production   Deploy the server of production stage.
+
+Enjoy it!
+    "
+`;
