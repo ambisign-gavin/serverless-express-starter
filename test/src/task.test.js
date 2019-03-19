@@ -243,7 +243,7 @@ describe('Setting task', () => {
 
 describe('Show complete message of task', () => {
     it('should showed correct', () => {
-        let log = jest.spyOn(global.console, 'log');
+        let log = jest.spyOn(console, 'log');
         showCompleteMessages();
         expect(log.mock.calls.length).toEqual(1);
         expect(log.mock.calls[0][0]).toMatchSnapshot();
