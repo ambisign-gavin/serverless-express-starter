@@ -25,6 +25,7 @@ function spyInquirerRobotDefaultValue() {
         getInstallPackages: jest.fn(),
         runExtraSettings: jest.fn(),
         injectSettingsToEslintConfig: jest.fn(),
+        getBuildScript: jest.fn(),
     };
     jest.spyOn(inquirerRobot, 'name', 'get').mockReturnValue('my-server');
     jest.spyOn(inquirerRobot, 'pkgManager', 'get').mockReturnValue('npm');

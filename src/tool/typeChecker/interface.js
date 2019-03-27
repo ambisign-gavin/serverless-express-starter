@@ -5,4 +5,5 @@ export interface TypeChecker {
     getInstallPackages(): Array<string>;
     runExtraSettings(projectPath: string): Promise<void>;
     injectSettingsToEslintConfig(config: Object): Object;
+    getBuildScript(): string;
 }

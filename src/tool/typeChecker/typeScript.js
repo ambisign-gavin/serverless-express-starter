@@ -37,6 +37,10 @@ export class TypeScriptTypeChecker implements TypeChecker {
         return newConfig;
     }
 
+    getBuildScript(): string {
+        return 'tsc';
+    }
+
     _parseEslintConfigPropertyToArray(property: ?string | ?Array<string>): Array<string> {
         if (property == null) {
             return [];

@@ -57,4 +57,8 @@ describe('Flow type checker', () => {
         });
     });
 
+    it('should get the build script correct', () => {
+        expect(typeChecker.getBuildScript()).toEqual('babel src/ -d lib/');
+    });
+
 });

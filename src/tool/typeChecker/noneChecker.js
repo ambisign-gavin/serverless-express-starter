@@ -21,4 +21,8 @@ export class NoneTypeChecker implements TypeChecker {
         };
         return newConfig;
     }
+
+    getBuildScript(): string {
+        return 'babel src/ -d lib/';
+    }
 }

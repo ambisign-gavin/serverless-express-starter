@@ -32,4 +32,8 @@ export class FlowTypeChecker implements TypeChecker {
         };
         return newConfig;
     }
+
+    getBuildScript(): string {
+        return 'babel src/ -d lib/';
+    }
 }
