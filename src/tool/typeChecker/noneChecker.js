@@ -13,4 +13,12 @@ export class NoneTypeChecker implements TypeChecker {
     runExtraSettings(projectPath: string): Promise<void> {
         return Promise.resolve();
     }
+
+    injectSettingsToEslintConfig(config: Object): Object {
+        let newConfig = {
+            ...config,
+            parser: 'babel-eslint'
+        };
+        return newConfig;
+    }
 }

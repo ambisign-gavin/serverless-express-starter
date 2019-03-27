@@ -43,4 +43,18 @@ describe('Flow type checker', () => {
 
     });
 
+    it('should injection settings to eslint config correct', () => {
+        let config = {
+            env: {
+                es6: true,
+                node: true
+            }
+        };
+
+        expect(typeChecker.injectSettingsToEslintConfig(config)).toEqual({
+            ...config,
+            parser: 'babel-eslint'
+        });
+    });
+
 });

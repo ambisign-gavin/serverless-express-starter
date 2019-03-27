@@ -24,4 +24,12 @@ export class FlowTypeChecker implements TypeChecker {
         });
         return;
     }
+
+    injectSettingsToEslintConfig(config: Object): Object {
+        let newConfig = {
+            ...config,
+            parser: 'babel-eslint'
+        };
+        return newConfig;
+    }
 }
