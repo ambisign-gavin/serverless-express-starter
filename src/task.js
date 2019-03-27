@@ -46,7 +46,7 @@ class Task {
                 projectName,
                 inquirerRobot.description
             );
-    
+            packageContext['scripts']['build'] = typeChecker.getBuildScript();
             writeFileSync(join(projectPath, 'package.json'), JSON.stringify(packageContext, null, 2) + '\n');
         } catch (error) {
             console.log('An error occurred while creating files:', error);

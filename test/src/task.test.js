@@ -47,7 +47,7 @@ describe('Create files task', () => {
             version: '1.0.0',
             description: 'This is my server.',
             scripts: {
-                'build': 'babel src/ -d lib/',
+                'test': 'echo test',
             },
             dependencies: {},
             devDependencies: {},
@@ -59,6 +59,7 @@ describe('Create files task', () => {
         jest.clearAllMocks();
         spyInquirerRobotDefaultValue();
         typeChecker.generateTemplatePath.mockReturnValue('/template/test/');
+        typeChecker.getBuildScript.mockReturnValue('babel src/ -d lib/');
         await task.createFiles(inquirerRobot);
     });
 

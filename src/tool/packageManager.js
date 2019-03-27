@@ -30,7 +30,6 @@ class PackageManager {
             version: '1.0.0',
             description,
             scripts: {
-                'build': 'babel src/ -d lib/',
                 'local': `${packageManager} run build && sls offline start`,
                 'deploy:dev': `${packageManager} run build && serverless deploy --stage dev`,
                 'confirm:production': 'cli-confirm \' Do you want to deploy production server? \'',

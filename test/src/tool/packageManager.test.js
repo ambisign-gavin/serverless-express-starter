@@ -64,7 +64,6 @@ describe('PackageManager', () => {
             version: '1.0.0',
             description: 'This is my server.',
             scripts: {
-                'build': 'babel src/ -d lib/',
                 'local': 'npm run build && sls offline start',
                 'deploy:dev': 'npm run build && serverless deploy --stage dev',
                 'confirm:production': 'cli-confirm \' Do you want to deploy production server? \'',
@@ -88,7 +87,6 @@ describe('PackageManager', () => {
             version: '1.0.0',
             description: 'This is my server.',
             scripts: {
-                'build': 'babel src/ -d lib/',
                 'local': 'yarn run build && sls offline start',
                 'deploy:dev': 'yarn run build && serverless deploy --stage dev',
                 'confirm:production': 'cli-confirm \' Do you want to deploy production server? \'',
