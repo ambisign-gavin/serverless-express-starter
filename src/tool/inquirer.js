@@ -52,7 +52,8 @@ export class InquirerRobot {
             message: 'Do you want to use type checker?',
             choices: [
                 'none',
-                'flow'
+                'flow',
+                'typescript'
             ]
         }));
 
