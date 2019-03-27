@@ -64,7 +64,7 @@ class Eslint {
     fixScripts(projectPath: string): execa.ExecaChildProcess {
         return execa('node_modules/eslint/bin/eslint.js',[
             '--fix',
-            './src/*.js'
+            './src/*'
         ], {
             cwd: projectPath,
             stdio: 'inherit'

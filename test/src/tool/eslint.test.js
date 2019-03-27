@@ -40,7 +40,7 @@ describe('Eslint', () => {
         expect(execa.mock.calls[0][0]).toEqual('node_modules/eslint/bin/eslint.js');
         expect(execa.mock.calls[0][1]).toEqual([
             '--fix',
-            './src/*.js'
+            './src/*'
         ]);
         expect(execa.mock.calls[0][2]).toEqual({
             cwd: 'path',
