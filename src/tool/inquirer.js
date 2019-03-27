@@ -1,8 +1,11 @@
 // @flow
 import inquirer, { type Questions } from 'inquirer';
-import { type PackageManagerPlatform, type TypeCheckerPlatform } from '../type';
+import { type PackageManagerPlatform } from '../type';
 import { existsSync } from 'fs';
 import { join } from 'path';
+import { TypeChecker } from './typeChecker/interface';
+import { NoneTypeChecker } from './typeChecker/noneChecker';
+import { typeCheckerFactory } from './typeChecker/factory';
 
 async function inquer(questions: Questions) {
     const answers = await inquirer.prompt([questions]);
@@ -13,7 +16,7 @@ export class InquirerRobot {
     _name: string = '';
     _description: string = '';
     _pkgManager: PackageManagerPlatform = 'npm';
-    _typeChecker: TypeCheckerPlatform = 'none';
+    _typeChecker: TypeChecker = new NoneTypeChecker();
     _isUsedEslint: boolean = false;
 
     async run() {
@@ -43,7 +46,7 @@ export class InquirerRobot {
             ]
         });
 
-        this._typeChecker = await inquer({
+        this._typeChecker = typeCheckerFactory.getTypeChecker(await inquer({
             type: 'list',
             name: 'TypeChecker',
             message: 'Do you want to use type checker?',
@@ -51,7 +54,7 @@ export class InquirerRobot {
                 'none',
                 'flow'
             ]
-        });
+        }));
 
         this._isUsedEslint = await inquer({
             type: 'confirm',
@@ -72,7 +75,7 @@ export class InquirerRobot {
         return this._pkgManager;
     }
 
-    get typeChecker(): TypeCheckerPlatform {
+    get typeChecker(): TypeChecker {
         return this._typeChecker;
     }
 

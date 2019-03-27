@@ -6,7 +6,6 @@ import { join } from 'path';
 import execa from 'execa';
 import { InquirerRobot } from './tool/inquirer';
 import packageManager from './tool/packageManager';
-import typeChecker from './tool/typeChecker';
 import eslint from './tool/eslint';
 
 class Task {
@@ -15,6 +14,7 @@ class Task {
             const projectName = inquirerRobot.name;
             const projectPath = join(process.cwd(), inquirerRobot.name);
             const pkgManagerPlatform = inquirerRobot.pkgManager;
+            const typeChecker = inquirerRobot.typeChecker;
     
             await execa('git', [
                 'clone',
@@ -33,7 +33,7 @@ class Task {
                 join(projectPath, 'package-lock.json'),
             ]);
     
-            execa.shellSync(`cp -a ${typeChecker.generateTemplatePath(inquirerRobot.typeChecker)}. ./`, {
+            execa.shellSync(`cp -a ${typeChecker.generateTemplatePath()}. ./`, {
                 cwd: projectPath
             });
     
@@ -71,10 +71,10 @@ class Task {
     
             const projectPath = join(process.cwd(), inquirerRobot.name);
             const pkgManagerPlatform = inquirerRobot.pkgManager;
-            const typeChackerPlatform = inquirerRobot.typeChecker;
+            const typeChecker = inquirerRobot.typeChecker;
     
-            if (typeChackerPlatform !== 'none') {
-                devDependenciesModule.push(...typeChecker.getInstallPackages(typeChackerPlatform));
+            if (typeChecker.getInstallPackages().length > 0) {
+                devDependenciesModule.push(...typeChecker.getInstallPackages());
             }
             
             if (inquirerRobot.isUsedEslint) {
@@ -103,9 +103,10 @@ class Task {
     async runExtraSettings(inquirerRobot: InquirerRobot) {
         try {
             const projectPath = join(process.cwd(), inquirerRobot.name);
-            if (inquirerRobot.typeChecker !== 'none') {
-                await typeChecker.runExtraSettings(inquirerRobot.typeChecker, projectPath);
-            }
+            const typeChecker = inquirerRobot.typeChecker;
+
+            await typeChecker.runExtraSettings(projectPath);
+
             if (inquirerRobot.isUsedEslint) {
                 await eslint.init(projectPath);
                 eslint.injectionParserConfig(projectPath);

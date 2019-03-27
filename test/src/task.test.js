@@ -4,9 +4,9 @@ import task from '../../src/task';
 import inquirerRobot from '../../src/tool/inquirer';
 import del from 'del';
 import fs from 'fs';
-import typeChecker from '../../src/tool/typeChecker';
 import packageManager from '../../src/tool/packageManager';
 import eslint from '../../src/tool/eslint';
+import { TypeChecker } from '../../src/tool/typeChecker/interface';
 
 jest.mock('execa');
 jest.mock('del');
@@ -15,13 +15,19 @@ jest.mock('chalk', () => ({
     green: jest.fn().mockImplementation(text => text)
 }));
 jest.mock('../../src/tool/eslint');
-jest.mock('../../src/tool/typeChecker');
 jest.mock('../../src/tool/packageManager');
 
+let typeChecker: TypeChecker;
+
 function spyInquirerRobotDefaultValue() {
+    typeChecker = {
+        generateTemplatePath: jest.fn(),
+        getInstallPackages: jest.fn(),
+        runExtraSettings: jest.fn(),
+    };
     jest.spyOn(inquirerRobot, 'name', 'get').mockReturnValue('my-server');
     jest.spyOn(inquirerRobot, 'pkgManager', 'get').mockReturnValue('npm');
-    jest.spyOn(inquirerRobot, 'typeChecker', 'get').mockReturnValue('none');
+    jest.spyOn(inquirerRobot, 'typeChecker', 'get').mockReturnValue(typeChecker);
     jest.spyOn(inquirerRobot, 'isUsedEslint', 'get').mockReturnValue(false);
 }
 
@@ -33,7 +39,6 @@ describe('Create files task', () => {
 
     beforeAll(() => {
         spyProcessCwd();
-        typeChecker.generateTemplatePath.mockReturnValue('/template/test/');
         packageManager.generatePackageJson.mockReturnValue({
             name: 'my-server',
             main: 'index.js',
@@ -51,6 +56,7 @@ describe('Create files task', () => {
     beforeEach(async () => {
         jest.clearAllMocks();
         spyInquirerRobotDefaultValue();
+        typeChecker.generateTemplatePath.mockReturnValue('/template/test/');
         await task.createFiles(inquirerRobot);
     });
 
@@ -101,9 +107,6 @@ describe('Install packages task', () => {
 
     beforeAll(() => {
         spyProcessCwd();
-        typeChecker.getInstallPackages.mockReturnValue([
-            'flow-bin@^0.95.0'
-        ]);
         eslint.getInstallPackages.mockReturnValue([
             'eslint@^5.0.0'
         ]);
@@ -115,7 +118,7 @@ describe('Install packages task', () => {
     });
 
     it('should install correct with no typeChecker', async () => {
-        jest.spyOn(inquirerRobot, 'typeChecker', 'get').mockReturnValue('none');
+        typeChecker.getInstallPackages.mockReturnValue([]);
         await task.installPackages(inquirerRobot);
         expect(packageManager.install.mock.calls.length).toEqual(2);
         expect(packageManager.install.mock.calls[0][0]).toEqual('npm');
@@ -139,7 +142,7 @@ describe('Install packages task', () => {
     });
 
     it('should install correct with typeChecker', async () => {
-        jest.spyOn(inquirerRobot, 'typeChecker', 'get').mockReturnValue('flow');
+        typeChecker.getInstallPackages.mockReturnValue(['flow-bin@^0.95.0']);
         await task.installPackages(inquirerRobot);
         expect(packageManager.install.mock.calls.length).toEqual(2);
         expect(packageManager.install.mock.calls[0][0]).toEqual('npm');
@@ -164,6 +167,7 @@ describe('Install packages task', () => {
     });
 
     it('should install correct with no eslint', async () => {
+        typeChecker.getInstallPackages.mockReturnValue([]);
         jest.spyOn(inquirerRobot, 'isUsedEslint', 'get').mockReturnValue(false);
         await task.installPackages(inquirerRobot);
         expect(packageManager.install.mock.calls.length).toEqual(2);
@@ -187,7 +191,8 @@ describe('Install packages task', () => {
         expect(packageManager.install.mock.calls[1][3]).toBeTruthy();
     });
 
-    it('should install correct with typeChecker', async () => {
+    it('should install correct with eslint', async () => {
+        typeChecker.getInstallPackages.mockReturnValue([]);
         jest.spyOn(inquirerRobot, 'isUsedEslint', 'get').mockReturnValue(true);
         await task.installPackages(inquirerRobot);
         expect(packageManager.install.mock.calls.length).toEqual(2);
@@ -226,7 +231,6 @@ describe('Setting task', () => {
     });
 
     it('should setting correct with type checker', async () => {
-        jest.spyOn(inquirerRobot, 'typeChecker', 'get').mockReturnValue('flow');
         await task.runExtraSettings(inquirerRobot);
         expect(typeChecker.runExtraSettings.mock.calls.length).toEqual(1);
     });
