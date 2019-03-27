@@ -6,4 +6,4 @@ export type Args = {|
 
 export type PackageManagerPlatform = 'npm' | 'yarn';
 
-export type TypeCheckerPlatform = 'none' | 'flow';
+export type TypeCheckerPlatform = 'none' | 'flow' | 'typescript';
