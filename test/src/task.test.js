@@ -84,6 +84,13 @@ describe('Create files task', () => {
             '/test/my-server/.babelrc',
             '/test/my-server/.git',
             '/test/my-server/package-lock.json',
+            '/test/my-server/flow-typed',
+            '/test/my-server/test',
+            '/test/my-server/.npmignore',
+            '/test/my-server/demo.gif',
+            '/test/my-server/jest.config.js',
+            '/test/my-server/LICENSE',
+            '/test/my-server/README.md',
         ]);
         expect(del.mock.calls[1][0]).toEqual([
             '/test/my-server/template',

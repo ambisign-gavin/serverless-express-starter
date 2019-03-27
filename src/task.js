@@ -22,24 +22,35 @@ class Task {
                 projectName
             ]);
     
-            await del([
-                join(projectPath, 'src'),
-                join(projectPath, 'bin'),
-                join(projectPath, '.gitignore'),
-                join(projectPath, '.eslintrc.js'),
-                join(projectPath, '.flowconfig'),
-                join(projectPath, '.babelrc'),
-                join(projectPath, '.git'),
-                join(projectPath, 'package-lock.json'),
-            ]);
+            await del(
+                this._joinFilesPath(projectPath, [
+                    'src',
+                    'bin',
+                    '.gitignore',
+                    '.eslintrc.js',
+                    '.flowconfig',
+                    '.babelrc',
+                    '.git',
+                    'package-lock.json',
+                    'flow-typed',
+                    'test',
+                    '.npmignore',
+                    'demo.gif',
+                    'jest.config.js',
+                    'LICENSE',
+                    'README.md',
+                ])
+            );
     
             execa.shellSync(`cp -a ${typeChecker.generateTemplatePath()}. ./`, {
                 cwd: projectPath
             });
     
-            await del([
-                join(projectPath, 'template'),
-            ]);
+            await del(
+                this._joinFilesPath(projectPath, [
+                    'template',
+                ])
+            );
     
             const packageContext = packageManager.generatePackageJson(
                 pkgManagerPlatform,
@@ -52,6 +63,10 @@ class Task {
             console.log('An error occurred while creating files:', error);
         }
         
+    }
+
+    _joinFilesPath(projectPath: string, files: Array<string>): Array<string>{
+        return files.map(file => join(projectPath, file));
     }
     
     async installPackages(inquirerRobot: InquirerRobot) {
