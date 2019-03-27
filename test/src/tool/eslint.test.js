@@ -34,33 +34,157 @@ describe('Eslint', () => {
         });
     });
 
-    it('should injection parser to js config correct', () => {
-        const path = join(process.cwd(), 'test/configs');
+    it('should fix scripts correct', () => {
+        eslint.fixScripts('path');
+        expect(execa.mock.calls.length).toEqual(1);
+        expect(execa.mock.calls[0][0]).toEqual('node_modules/eslint/bin/eslint.js');
+        expect(execa.mock.calls[0][1]).toEqual([
+            '--fix',
+            './src/*.js'
+        ]);
+        expect(execa.mock.calls[0][2]).toEqual({
+            cwd: 'path',
+            stdio: 'inherit'
+        });
+    });
+
+});
+
+describe('Eslint with js config', () => {
+
+    const path = join(process.cwd(), 'test/configs');
+
+    beforeAll(() => {
         fs.existsSync.mockImplementation((path) => {
             return /.*(js)$/.test(path);
         });
-        eslint.injectionParserConfig(path);
+    });
+
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
+
+    it('should load correct', () => {
+        let config = eslint.loadConfig(path);
+        expect(config).toEqual({
+            env: {
+                es6: true,
+                node: true
+            },
+            extends: 'eslint:recommended',
+            globals: {
+                Atomics: 'readonly',
+                SharedArrayBuffer: 'readonly'
+            },
+            parserOptions: {
+                ecmaVersion: 2018,
+                sourceType: 'module'
+            },
+            rules: {}
+        });
+    });
+
+    it('should save correct', () => {
+        let config = {
+            env: {
+                es6: true,
+                node: true
+            },
+            extends: 'eslint:recommended',
+            globals: {
+                Atomics: 'readonly',
+                SharedArrayBuffer: 'readonly'
+            },
+            parserOptions: {
+                ecmaVersion: 2018,
+                sourceType: 'module'
+            },
+            rules: {},
+            parser: 'babel-eslint'
+        };
+        eslint.saveConfig(path, config);
         expect(fs.writeFileSync.mock.calls.length).toEqual(1);
         expect(fs.writeFileSync.mock.calls[0][0]).toEqual(join(path, '.eslintrc.js'));
         expect(fs.writeFileSync.mock.calls[0][1]).toMatchSnapshot();
     });
 
-    it('should injection parser to json config correct', () => {
-        const path = join(process.cwd(), 'test/configs');
+});
+
+describe('Eslint with json config', () => {
+
+    const path = join(process.cwd(), 'test/configs');
+
+    beforeAll(() => {
         fs.existsSync.mockImplementation((path) => {
             return /.*(json)$/.test(path);
         });
-        eslint.injectionParserConfig(path);
+    });
+
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
+
+    it('should load correct', () => {
+        let config = eslint.loadConfig(path);
+        expect(config).toEqual({
+            env: {
+                es6: true,
+                node: true
+            },
+            extends: 'eslint:recommended',
+            globals: {
+                Atomics: 'readonly',
+                SharedArrayBuffer: 'readonly'
+            },
+            parserOptions: {
+                ecmaVersion: 2018,
+                sourceType: 'module'
+            },
+            rules: {}
+        });
+    });
+
+    it('should save correct', () => {
+        let config = {
+            env: {
+                es6: true,
+                node: true
+            },
+            extends: 'eslint:recommended',
+            globals: {
+                Atomics: 'readonly',
+                SharedArrayBuffer: 'readonly'
+            },
+            parserOptions: {
+                ecmaVersion: 2018,
+                sourceType: 'module'
+            },
+            rules: {},
+            parser: 'babel-eslint'
+        };
+        eslint.saveConfig(path, config);
         expect(fs.writeFileSync.mock.calls.length).toEqual(1);
         expect(fs.writeFileSync.mock.calls[0][0]).toEqual(join(path, '.eslintrc.json'));
         expect(fs.writeFileSync.mock.calls[0][1]).toMatchSnapshot();
     });
 
-    it('should injection parser to yaml config correct', () => {
-        const path = join(process.cwd(), 'test/configs');
+});
+
+describe('Eslint with yml config', () => {
+
+    const path = join(process.cwd(), 'test/configs');
+
+    beforeAll(() => {
         fs.existsSync.mockImplementation((path) => {
             return /.*(yml)$/.test(path);
         });
+    });
+
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
+
+    it('should load correct', () => {
         jest.spyOn(YAML, 'parse').mockReturnValue({
             env: {
                 es6: true,
@@ -77,24 +201,50 @@ describe('Eslint', () => {
             },
             rules: {}
         });
-        eslint.injectionParserConfig(path);
+
+        let config = eslint.loadConfig(path);
+        expect(config).toEqual({
+            env: {
+                es6: true,
+                node: true
+            },
+            extends: 'eslint:recommended',
+            globals: {
+                Atomics: 'readonly',
+                SharedArrayBuffer: 'readonly'
+            },
+            parserOptions: {
+                ecmaVersion: 2018,
+                sourceType: 'module'
+            },
+            rules: {}
+        });
+    });
+
+    it('should save correct', () => {
+        let config = {
+            env: {
+                es6: true,
+                node: true
+            },
+            extends: 'eslint:recommended',
+            globals: {
+                Atomics: 'readonly',
+                SharedArrayBuffer: 'readonly'
+            },
+            parserOptions: {
+                ecmaVersion: 2018,
+                sourceType: 'module'
+            },
+            rules: {},
+            parser: 'babel-eslint'
+        };
+        eslint.saveConfig(path, config);
         expect(fs.writeFileSync.mock.calls.length).toEqual(1);
         expect(fs.writeFileSync.mock.calls[0][0]).toEqual(join(path, '.eslintrc.yml'));
         expect(fs.writeFileSync.mock.calls[0][1]).toMatchSnapshot();
     });
 
-    it('should fix scripts correct', () => {
-        eslint.fixScripts('path');
-        expect(execa.mock.calls.length).toEqual(1);
-        expect(execa.mock.calls[0][0]).toEqual('node_modules/eslint/bin/eslint.js');
-        expect(execa.mock.calls[0][1]).toEqual([
-            '--fix',
-            './src/*.js'
-        ]);
-        expect(execa.mock.calls[0][2]).toEqual({
-            cwd: 'path',
-            stdio: 'inherit'
-        });
-    });
-
 });
+
+

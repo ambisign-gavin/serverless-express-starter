@@ -21,36 +21,42 @@ class Eslint {
         });
     }
 
-    injectionParserConfig(projectPath: string) {
-        const jsConfig = join(projectPath, '.eslintrc.js');
+    loadConfig(configPath: string): Object {
+        let config = {};
+        const jsConfig = join(configPath, '.eslintrc.js');
         if (fs.existsSync(jsConfig)) {
-            let eslintrc: { default: Object, parser: string } = require(jsConfig);
-            delete eslintrc['default'];
-            eslintrc['parser'] = 'babel-eslint';
-            const newEslintrc = 'module.exports = ' + JSON.stringify(eslintrc, null, 4) + '\n';
+            config = require(jsConfig);
+        }
+
+        const jsonConfig = join(configPath, '.eslintrc.json');
+        if (fs.existsSync(jsonConfig)) {
+            config = require(jsonConfig);
+        }
+
+        const ymlConfig = join(configPath, '.eslintrc.yml');
+        if (fs.existsSync(ymlConfig)) {
+            const file = fs.readFileSync(ymlConfig, 'utf8');
+            config = YAML.parse(file);
+        }
+        return config;
+    }
+
+    saveConfig(configPath: string, config: Object) {
+        const jsConfig = join(configPath, '.eslintrc.js');
+        if (fs.existsSync(jsConfig)) {
+            const newEslintrc = 'module.exports = ' + JSON.stringify(config, null, 4) + '\n';
             fs.writeFileSync(jsConfig, newEslintrc);
         }
 
-        const jsonConfig = join(projectPath, '.eslintrc.json');
+        const jsonConfig = join(configPath, '.eslintrc.json');
         if (fs.existsSync(jsonConfig)) {
-            let eslintrc = require(jsonConfig);
-            eslintrc = {
-                ...eslintrc,
-                parser: 'babel-eslint'
-            };
-            const newEslintrc = JSON.stringify(eslintrc, null, 4) + '\n';
+            const newEslintrc = JSON.stringify(config, null, 4) + '\n';
             fs.writeFileSync(jsonConfig, newEslintrc);
         }
 
-        const ymlConfig = join(projectPath, '.eslintrc.yml');
+        const ymlConfig = join(configPath, '.eslintrc.yml');
         if (fs.existsSync(ymlConfig)) {
-            const file = fs.readFileSync(ymlConfig, 'utf8');
-            let eslintrc = YAML.parse(file);
-            eslintrc = {
-                ...eslintrc,
-                parser: 'babel-eslint'
-            };
-            const newEslintrc = YAML.stringify(eslintrc);
+            const newEslintrc = YAML.stringify(config);
             fs.writeFileSync(ymlConfig, newEslintrc);
         }
     }

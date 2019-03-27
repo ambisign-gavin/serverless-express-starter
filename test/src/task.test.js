@@ -24,6 +24,7 @@ function spyInquirerRobotDefaultValue() {
         generateTemplatePath: jest.fn(),
         getInstallPackages: jest.fn(),
         runExtraSettings: jest.fn(),
+        injectSettingsToEslintConfig: jest.fn(),
     };
     jest.spyOn(inquirerRobot, 'name', 'get').mockReturnValue('my-server');
     jest.spyOn(inquirerRobot, 'pkgManager', 'get').mockReturnValue('npm');
@@ -230,17 +231,47 @@ describe('Setting task', () => {
         spyInquirerRobotDefaultValue();
     });
 
-    it('should setting correct with type checker', async () => {
+    it('should run type checker settings correct', async () => {
         await task.runExtraSettings(inquirerRobot);
         expect(typeChecker.runExtraSettings.mock.calls.length).toEqual(1);
     });
 
-    it('should setting correct with eslint', async () => {
+    it('should init eslint correct', async () => {
         jest.spyOn(inquirerRobot, 'isUsedEslint', 'get').mockReturnValue(true);
         await task.runExtraSettings(inquirerRobot);
         expect(eslint.init.mock.calls.length).toEqual(1);
-        expect(eslint.injectionParserConfig.mock.calls.length).toEqual(1);
+    });
+
+    it('should use eslint to fix scripts correct', async () => {
+        jest.spyOn(inquirerRobot, 'isUsedEslint', 'get').mockReturnValue(true);
+        await task.runExtraSettings(inquirerRobot);
         expect(eslint.fixScripts.mock.calls.length).toEqual(1);
+    });
+
+    it('should inject type checker settings to eslint config correct', async () => {
+        let loadConfigReturned = {
+            env: {
+                es6: true,
+                node: true
+            }
+        };
+        let injectSettingsToEslintConfigReturned = {
+            env: {
+                es6: true,
+                node: true
+            },
+            parser: 'babel-parser',
+        };
+        eslint.loadConfig.mockReturnValue(loadConfigReturned);
+        typeChecker.injectSettingsToEslintConfig.mockReturnValue(injectSettingsToEslintConfigReturned);
+        jest.spyOn(inquirerRobot, 'isUsedEslint', 'get').mockReturnValue(true);
+
+        await task.runExtraSettings(inquirerRobot);
+        expect(eslint.loadConfig.mock.calls.length).toEqual(1);
+        expect(typeChecker.injectSettingsToEslintConfig.mock.calls.length).toEqual(1);
+        expect(typeChecker.injectSettingsToEslintConfig.mock.calls[0][0]).toEqual(loadConfigReturned);
+        expect(eslint.saveConfig.mock.calls.length).toEqual(1);
+        expect(eslint.saveConfig.mock.calls[0][1]).toEqual(injectSettingsToEslintConfigReturned);
     });
 
 });

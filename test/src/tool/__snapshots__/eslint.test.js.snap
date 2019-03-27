@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Eslint should injection parser to js config correct 1`] = `
+exports[`Eslint with js config should save correct 1`] = `
 "module.exports = {
     \\"env\\": {
         \\"es6\\": true,
@@ -21,7 +21,7 @@ exports[`Eslint should injection parser to js config correct 1`] = `
 "
 `;
 
-exports[`Eslint should injection parser to json config correct 1`] = `
+exports[`Eslint with json config should save correct 1`] = `
 "{
     \\"env\\": {
         \\"es6\\": true,
@@ -42,7 +42,7 @@ exports[`Eslint should injection parser to json config correct 1`] = `
 "
 `;
 
-exports[`Eslint should injection parser to yaml config correct 1`] = `
+exports[`Eslint with yml config should save correct 1`] = `
 "env:
   es6: true
   node: true

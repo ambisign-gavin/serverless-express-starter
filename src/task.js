@@ -109,7 +109,9 @@ class Task {
 
             if (inquirerRobot.isUsedEslint) {
                 await eslint.init(projectPath);
-                eslint.injectionParserConfig(projectPath);
+                let config = eslint.loadConfig(projectPath);
+                config = typeChecker.injectSettingsToEslintConfig(config);
+                eslint.saveConfig(projectPath, config);
                 await eslint.fixScripts(projectPath);
             }
         } catch (error) {
