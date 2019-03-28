@@ -1,6 +1,6 @@
 # serverless-express-starter
 
-A tool you can simply use one command to create the project for the Serverless and Express.
+A tool you can simply use one command to create the project for the Serverless and Express. Support both Flow and TypeScript.
 
 <img src="demo.gif" width="600"/>
 
@@ -31,7 +31,7 @@ Please read docs on the Serverless website.
 
 ## Todos
 
-- [ ] Support TypeScript
+- [x] Support TypeScript
 - [ ] Support Google Cloud Functions
 - [ ] Support Test Tools
 - [ ] Support custom Serverless plugins
